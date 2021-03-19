@@ -1,9 +1,7 @@
 import networkx as nx
-from collections import defaultdict
+from networkx.classes.function import subgraph
 from networkx.convert_matrix import to_numpy_array
 import numpy as np
-
-from networkx.linalg.graphmatrix import adjacency_matrix
 
 def read_data(filename: str) -> list:
     listOfEdges = []
@@ -21,13 +19,6 @@ def create_graph(filename: str) -> nx.Graph:
     graph.add_edges_from(edgeList)
     return graph    
 
-def ant_dsatur():
-    pass 
-
-graph = create_graph('data/gcol1.txt')
-# n = graph.number_of_nodes()
-# M = to_numpy_array(graph)
-# change_M = np.zeros((n, n))
 
 def init_M(M: np.array):
     for i in range(len(M)):
@@ -37,7 +28,41 @@ def init_M(M: np.array):
             else: M[i][j] = 0
     return M
 
-# M = init_M(M)
+def find_first_color(color_list: list):
+    color_set = set(color_list)
+    count = 0
+    while True:
+        if count not in color_set:
+            return count
+        count += 1    
+
+def ant_dsatur(graph: nx.Graph):
+    vertices = list(graph.nodes())
+    c_min = {}
+    d_sat = {}
+    for vertex in vertices:
+        c_min[vertex] = 0
+        d_sat[vertex] = 0
+    V = {i: [] for i in range(len(vertices))}
+    A = vertices
+    sub_A = subgraph(graph, A)        # uncolored vertices 
+    degrees = list(sub_A.degrees(A))
+    degrees.sort(key=lambda x:x[1], reverse=True)
+    v = degrees[0]
+    V[0].append(v)
+    q = 1       # number of colors used 
+    for i in range(1, len(vertices)):
+        for v_prime in sub_A.neighbors(v):
+            used_colors = set()
+            for item in V.items():
+                if v_prime == item[1]: used_colors.add(item[0])
+            c_min[v_prime] = find_first_color(used_colors) 
+            if v_prime in V.values(): d_sat[v_prime] += 1
+        A.remove(v)
+        sub_A.remove_node(v)   
+        partial_sol = {key: V.get(key) for key in range(q)}
+        # apply selection strategy
+
 
 def ant_col(graph: nx.Graph, n_cycles: int, n_ants: int):
     n = graph.number_of_nodes()
@@ -49,3 +74,15 @@ def ant_col(graph: nx.Graph, n_cycles: int, n_ants: int):
         for j in range(n_ants):
             # color graph using dsatur 
             pass
+
+
+
+
+dic = {0:5, 1:6, 2:7, 3:6, 4:9, 5:11}
+mdic = {key: dic.get(key) for key in range(3)}
+print(mdic)
+
+
+
+graph = create_graph('data/gcol1.txt')
+
