@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 
 class ant:
-    def __init__(self, alpha = 0.6, beta=0.4) -> None:
+    def __init__(self, alpha = 1, beta=5) -> None:
         self.graph = None 
         self.coloring = {}
         self.start_vtx = None 
@@ -92,8 +92,14 @@ class ant:
         self.start_vtx = nextvtx
         return nextvtx
    
-    def trail(self):
-        pass
+    def trail(self, G: nx.Graph):
+        m_trail = np.zeros((n_nodes, n_nodes), float)
+        nodes = convert_int_lst(list(G.nodes()))
+        for v in nodes:
+            for u in nodes:
+                if self.assign_colors[v] == self.assign_colors[u]:
+                    m_trail[v-1][u-1] = 1 
+        return m_trail
 
 
 def read_data(filename: str) -> list:
@@ -148,11 +154,11 @@ def initialize_coloring(G: nx.Graph):
 
 def evap_trail(G: nx.Graph, M, rho: float):
     nodes = convert_int_lst(list(G.nodes()))
-    for v in nodes():
-        for u in nodes():
-            M[v, u] = M[v, u] * (1 - rho)
+    for v in nodes:
+        for u in nodes:
+            M[v-1, u-1] = M[v-1, u-1] * (1 - rho)
 
-def select_best(M, ants):
+def select_best(M, ants: list, G: nx.Graph):
     best = 0
     elite_ant = None 
     for ant in ants:
@@ -162,9 +168,9 @@ def select_best(M, ants):
         elif ant.n_colors < best:
             best = ant.n_colors 
             elite_ant = ant 
-    elite_matrix = elite_ant.trail()
+    elite_matrix = elite_ant.trail(G)
     M = M + elite_matrix
-    return elite_ant.best, elite_ant.assign_colors
+    return elite_ant.n_colors, elite_ant.assign_colors
 
 def convert_int_lst(lst: list):
     lst = list(map(int, lst))
@@ -188,18 +194,26 @@ def solve(G: nx.Graph, n_ants, n_iters, a, b, evap):
     for i in range(n_iters):
         ants = create_ants(G, n_ants, colors)
         for ant in ants:
-            ant.construct_coloring()
-            
-            
-        # evap_trail(G, M, evap)
+            ant.construct_coloring()   
+        evap_trail(G, M, evap)
+        best_dist, best_sol = select_best(M, ants, G)
+        if final_cost == 0:
+            final_cost = best_dist
+            final_sol = best_sol
+        elif best_dist < final_cost:
+            final_cost = best_dist
+            final_sol = best_sol
+        print(final_cost)
+    return final_sol, final_cost
+        
     
 
     
 
-graph = create_graph('data/gcol1.txt')
+graph = create_graph('data/gcol3.txt')
 # lst = list(graph.nodes())
 # lst = list(map(int, lst))
 # print(sorted(lst))
 # cols = initialize_coloring(graph)
 # draw_graph(graph)
-solve(graph, 5, 4, 0.6, 0.6, 0.8)
+solve(graph, 20, 100, 0.6, 0.6, 0.5)
