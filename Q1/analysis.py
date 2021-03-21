@@ -20,7 +20,7 @@ def analyse_data(graph,param,n_iters=10):
         plt.show()
         print(frame)
 
-def analyse_data_param_a(graph,aList,b,n_iters=20):
+def analyse_data_param_a(graph,aList,b,n_iters=15):
     iters = [i for i in range(n_iters)]
 
     avgList = []
@@ -39,7 +39,7 @@ def analyse_data_param_a(graph,aList,b,n_iters=20):
     plt.show()
     print(frame)
 
-def analyse_data_param_b(graph,bList,a,n_iters=20):
+def analyse_data_param_b(graph,bList,a,n_iters=15):
     iters = [i for i in range(n_iters)]
 
     avgList = []
@@ -50,7 +50,7 @@ def analyse_data_param_b(graph,bList,a,n_iters=20):
         bestList.append(min(best))
     
 
-    d1 = {"Beta": aList, "Average Fitness": avgList, "Best Fitness": bestList } 
+    d1 = {"Beta": bList, "Average Fitness": avgList, "Best Fitness": bestList } 
     frame = pd.DataFrame(d1,columns=["Beta","Average Fitness","Best Fitness"])
     frame.plot(x ='Alpha', y=['Best Fitness', 'Average Fitness'], style='o')
     plt.title('Maximum fitness of ACO against Beta')
