@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 
 class ant:
-    def __init__(self, alpha = 1, beta=5) -> None:
+    def __init__(self) -> None:
         self.graph = None 
         self.coloring = {}
         self.start_vtx = None 
@@ -25,30 +25,27 @@ class ant:
             self.start_vtx = random.choice(keys) # Randomly assign a graph vertex to start vertex
         else: 
             self.start_vtx = startvtx
-        # print("yo")
-        # self.start_vtx = startvtx
         self.visited_vtx = []
         self.unvisited_vtx = keys.copy()
-        # print(self.unvisited_vtx)
-        if (len(self.visited_vtx)==0): #Abbas: Won't this always be true?
-            # assign color to node 
-            # print(self.start_vtx)
-            self.assign_color(self.start_vtx, self.avail_colors[0])
+        # assign color to first node 
+        self.assign_color(self.start_vtx, self.avail_colors[0])
         return self 
     
     def assign_color(self, vtx, color):
+        # assign color to node and add it to visited list 
         self.assign_colors[vtx] = color 
         self.visited_vtx.append(vtx)
-        # print(vtx)
         self.unvisited_vtx.remove(vtx)
 
 
     def construct_coloring(self):
+        # construct a coloring using modified DSATUR algorithm
+        
         n_unvisited = len(self.unvisited_vtx)
         tabu_lst = []
+        # find 
         for i in range(n_unvisited):
             nextvtx = self.next_vertex()
-            # print(nextvtx)
             for j in range(n_nodes):
                 if adj_mat[nextvtx-1, j-1] == 1 :
                     tabu_lst.append((self.assign_colors[j+1]))
@@ -187,7 +184,6 @@ def solve(G: nx.Graph, n_ants, n_iters, a, b, evap):
     final_sol = {}
     final_cost = 0
     n_nodes = G.number_of_nodes()
-    nodes_int = convert_int_lst(list(G.nodes()))
     adj_mat = create_adj_mat(G)
     colors = initialize_coloring(G)
     M = init_M(G)
@@ -206,14 +202,5 @@ def solve(G: nx.Graph, n_ants, n_iters, a, b, evap):
         print(final_cost)
     return final_sol, final_cost
         
-    
-
-    
-
-graph = create_graph('data/gcol3.txt')
-# lst = list(graph.nodes())
-# lst = list(map(int, lst))
-# print(sorted(lst))
-# cols = initialize_coloring(graph)
-# draw_graph(graph)
-solve(graph, 20, 100, 0.6, 0.6, 0.5)
+graph = create_graph('data/gcol1.txt')
+solve(graph, 20, 10, 5, 8, 0.5)
