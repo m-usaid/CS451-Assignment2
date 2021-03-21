@@ -226,3 +226,4 @@ def solve(G: nx.Graph, n_ants, n_iters, a, b, evap):
 
 # graph = create_graph('data/gcol1.txt')
 # solve(graph, 20, 5, 3, 5, 0.5)
+
