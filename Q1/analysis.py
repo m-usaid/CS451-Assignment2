@@ -66,9 +66,9 @@ graph = create_graph('data/gcol1.txt')
 # draw_graph(graph)
 
 
-# analyse_data(graph,param_list,10)
+analyse_data(graph,param_list,10)
 
 
-bList = [0.5,0.7,0.8,0.9,1,2]
-a = 0.8
-analyse_data_param_b(graph,bList,a)
+# bList = [0.5,0.7,0.8,0.9,1,2]
+# a = 0.8
+# analyse_data_param_b(graph,bList,a)
