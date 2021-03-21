@@ -20,9 +20,9 @@ class ant:
         self.avail_colors = sorted(colorings.copy()) #.copy()
         keys = list(G.nodes())
         keys = convert_int_lst(keys)
-        self.assign_colors = {key: None for key in keys}
-        if startvtx == None : 
-            self.start_vtx = random.choice(keys)
+        self.assign_colors = {key: None for key in keys} # Make a dictionary with graph's nodes as keys storing their colour
+        if startvtx == None : # if no start vertex given as input
+            self.start_vtx = random.choice(keys) # Randomly assign a graph vertex to start vertex
         else: 
             self.start_vtx = startvtx
         # print("yo")
@@ -30,7 +30,7 @@ class ant:
         self.visited_vtx = []
         self.unvisited_vtx = keys.copy()
         # print(self.unvisited_vtx)
-        if (len(self.visited_vtx)==0):
+        if (len(self.visited_vtx)==0): #Abbas: Won't this always be true?
             # assign color to node 
             # print(self.start_vtx)
             self.assign_color(self.start_vtx, self.avail_colors[0])
