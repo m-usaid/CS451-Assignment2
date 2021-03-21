@@ -16,6 +16,7 @@ def analyse_data(graph,param,n_iters=10):
         frame = pd.DataFrame(d1,columns=["Iterations","Average Fitness","Best Fitness"])
         frame.plot(x ='Iterations', y=['Best Fitness', 'Average Fitness'], kind = 'line')
         plt.show()
+        plt.savefig('plot-{0}'.format((a,b)))
         print(frame)
 
 
