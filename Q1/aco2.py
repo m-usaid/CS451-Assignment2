@@ -221,7 +221,7 @@ def solve(G: nx.Graph, n_ants, n_iters, a, b, evap):
         avg_fit = avg_fit / n_ants
         avgs.append(avg_fit)
         best_fit.append(best_dist)
-        # print(avgs, best_fit)
+        print(avgs[-1], best_fit[-1])
     return avgs, best_fit 
 
 # graph = create_graph('data/gcol1.txt')
